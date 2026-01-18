@@ -1,10 +1,11 @@
-import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Edit app/index.tsx to edit this screen.</Text>
+      <Text style={styles.text}>
+        Edit Hello World app/index.tsx to edit this screen. !!! asd asdasdas asdasd asdasd asd ad asd
+      </Text>
     </View>
   );
 }
