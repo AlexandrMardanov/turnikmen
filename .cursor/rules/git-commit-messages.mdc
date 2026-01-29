@@ -1,0 +1,73 @@
+---
+description: Git commit message standards for this project
+alwaysApply: true
+---
+
+# Git Commit Message Guidelines
+
+When writing commit messages, follow these rules:
+
+## Format
+
+```
+<type>: <short description>
+```
+
+## Rules
+
+- **Present tense**: "add feature" not "added feature"
+- **Active voice**: Direct and clear
+- **Imperative mood**: Commands like "fix", "add", "update"
+- **Concise**: Maximum 50 characters
+- **Lowercase**: Start with lowercase after type prefix
+
+## Types
+
+- `feat:` - New feature or functionality
+- `fix:` - Bug fix
+- `refactor:` - Code restructuring without behavior change
+- `style:` - Code formatting, styling improvements
+- `perf:` - Performance improvements
+- `docs:` - Documentation changes
+- `chore:` - Maintenance tasks, dependency updates
+- `test:` - Adding or updating tests
+- `build:` - Build system or configuration changes
+- `ci:` - CI/CD configuration changes
+
+## Examples
+
+✅ **Good**:
+```
+feat: add secondary button variant
+fix: resolve login redirect loop
+refactor: extract auth logic to hook
+style: improve profile card layout
+perf: optimize image loading
+docs: update setup instructions
+chore: update expo-router to v4
+```
+
+❌ **Bad**:
+```
+Added new button (past tense, no type)
+Fix bug (not descriptive)
+Updated some files (too vague)
+feat: Added a new secondary button variant with transparent background and border styling (too long)
+```
+
+## Multi-file Changes
+
+When committing multiple related changes, focus on the **primary purpose**:
+
+- If adding a feature that requires multiple files: `feat: add user profile page`
+- If fixing a bug across files: `fix: resolve authentication state sync`
+- If refactoring: `refactor: consolidate error handling`
+
+## Analysis Before Writing
+
+Before generating a commit message:
+1. Review all staged changes with `git diff --staged`
+2. Identify the primary purpose of the changes
+3. Choose the most appropriate type prefix
+4. Write a clear, concise description
+5. Ensure it's under 50 characters
