@@ -6,9 +6,9 @@ const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables');
-  console.error('EXPO_PUBLIC_SUPABASE_URL:', supabaseUrl ? 'Set' : 'Missing');
-  console.error('EXPO_PUBLIC_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Set' : 'Missing');
+  console.error('Немає змінних середовища Supabase');
+  console.error('EXPO_PUBLIC_SUPABASE_URL:', supabaseUrl ? 'Встановлено' : 'Немає');
+  console.error('EXPO_PUBLIC_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Встановлено' : 'Немає');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
