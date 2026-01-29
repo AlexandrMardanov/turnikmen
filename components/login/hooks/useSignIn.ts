@@ -18,7 +18,8 @@ export function useSignIn() {
 
     try {
       await signIn(email, password);
-    } catch {
+    } catch (error) {
+      console.error('Помилка входу:', error);
       Alert.alert('Помилка', 'Виникла помилка при вході');
     } finally {
       setLoading(false);

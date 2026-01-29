@@ -9,9 +9,7 @@ module.exports = {
   trailingComma: 'es5',
   jsxSingleQuote: true,
   importOrder: [
-    '^(react|react-native)$',
-    '^expo',
-    '^@expo',
+    '^react',
     '<THIRD_PARTY_MODULES>',
     '^@/(.*)$',
     '^(app|src)/(.*)$',

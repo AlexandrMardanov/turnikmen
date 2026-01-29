@@ -33,7 +33,8 @@ export function useSignUp() {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-    } catch {
+    } catch (error) {
+      console.error('Помилка реєстрації:', error);
       Alert.alert('Помилка', 'Виникла помилка при реєстрації');
     } finally {
       setLoading(false);
