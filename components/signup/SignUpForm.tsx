@@ -9,8 +9,18 @@ import { SignUpInputs } from './components/SignUpInputs';
 import { useSignUp } from './hooks/useSignUp';
 
 export function SignUpForm() {
-  const { email, setEmail, password, setPassword, confirmPassword, setConfirmPassword, loading, handleSignUp } =
-    useSignUp();
+  const {
+    name,
+    setName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    loading,
+    handleSignUp,
+  } = useSignUp();
 
   return (
     <DismissKeyboard>
@@ -19,10 +29,12 @@ export function SignUpForm() {
           <Image source={require('@/assets/icon.png')} style={styles.icon} />
           <Title title='Реєстрація' subtitle='Зареєструйтеся, щоб почати' />
           <SignUpInputs
+            name={name}
             email={email}
             password={password}
             confirmPassword={confirmPassword}
             loading={loading}
+            onNameChange={setName}
             onEmailChange={setEmail}
             onPasswordChange={setPassword}
             onConfirmPasswordChange={setConfirmPassword}
@@ -31,7 +43,7 @@ export function SignUpForm() {
             title='Зареєструватися'
             onPress={handleSignUp}
             loading={loading}
-            disabled={!email || !password || !confirmPassword}
+            disabled={!name || !email || !password || !confirmPassword}
           />
           <SignUpFooter />
         </View>

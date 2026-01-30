@@ -1,20 +1,39 @@
 import { Input } from '@/components/shared/Input';
 
 type SignUpInputsProps = {
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
   loading: boolean;
+  onNameChange: (name: string) => void;
   onEmailChange: (email: string) => void;
   onPasswordChange: (password: string) => void;
   onConfirmPasswordChange: (confirmPassword: string) => void;
 };
 
 export function SignUpInputs(props: SignUpInputsProps) {
-  const { email, password, confirmPassword, loading, onEmailChange, onPasswordChange, onConfirmPasswordChange } = props;
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    loading,
+    onNameChange,
+    onEmailChange,
+    onPasswordChange,
+    onConfirmPasswordChange,
+  } = props;
 
   return (
     <>
+      <Input
+        placeholder="Ваше ім'я"
+        value={name}
+        onChangeText={onNameChange}
+        autoCapitalize='words'
+        editable={!loading}
+      />
       <Input
         placeholder='Електронна пошта'
         value={email}

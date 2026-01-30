@@ -37,6 +37,7 @@ export function Input(props: InputProps) {
         onBlur?.(e);
       }}
       placeholderTextColor={COLORS.text + '80'}
+      autoCorrect={false}
       {...restProps}
     />
   );

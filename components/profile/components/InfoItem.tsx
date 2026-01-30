@@ -5,16 +5,15 @@ import { COLORS } from '@/constants/colors';
 type InfoItemProps = {
   label: string;
   value: string;
-  small?: boolean;
 };
 
 export function InfoItem(props: InfoItemProps) {
-  const { label, value, small = false } = props;
+  const { label, value } = props;
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <Text style={[styles.value, small && styles.valueSmall]}>{value}</Text>
+      <Text style={styles.value}>{value}</Text>
     </View>
   );
 }
@@ -25,16 +24,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: COLORS.text + '80',
+    color: COLORS.text,
     marginBottom: 4,
     fontWeight: '600',
   },
   value: {
     fontSize: 16,
     color: COLORS.text,
-  },
-  valueSmall: {
-    fontSize: 12,
-    fontFamily: 'monospace',
+    fontWeight: '500',
   },
 });

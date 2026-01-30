@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function useSignUp() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -11,7 +12,7 @@ export function useSignUp() {
   const { signUp } = useAuth();
 
   async function handleSignUp() {
-    if (!email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword) {
       Alert.alert('Помилка', 'Будь ласка, заповніть всі поля');
       return;
     }
@@ -29,7 +30,8 @@ export function useSignUp() {
     setLoading(true);
 
     try {
-      await signUp(email, password);
+      await signUp(email, password, name);
+      setName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
@@ -42,6 +44,8 @@ export function useSignUp() {
   }
 
   return {
+    name,
+    setName,
     email,
     setEmail,
     password,

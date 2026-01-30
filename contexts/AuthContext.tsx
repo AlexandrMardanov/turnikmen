@@ -1,91 +1,43 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
-
-import * as SplashScreen from 'expo-splash-screen';
+import React, { createContext, useContext } from 'react';
 
 import { User } from '@supabase/supabase-js';
 
 import { supabase } from '@/lib/supabase';
 
-type AuthProviderProps = {
-  children: React.ReactNode;
-};
+import { useAuthOperations } from './hooks/useAuthOperations';
+import { useAuthSession } from './hooks/useAuthSession';
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
+  updateProfile: (name: string) => Promise<void>;
+};
+
+type AuthProviderProps = {
+  children: React.ReactNode;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider(props: AuthProviderProps) {
   const { children } = props;
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Check active session
-    supabase.auth
-      .getSession()
-      .then(({ data: { session }, error }) => {
-        if (error) {
-          Alert.alert('Помилка', 'Не вдалося отримати сесію');
-          return;
-        }
-        setUser(session?.user ?? null);
-      })
-      .catch(() => {
-        Alert.alert('Помилка', 'Не вдалося отримати сесію');
-        return;
-      })
-      .finally(async () => {
-        setLoading(false);
-        // Hide splash screen after auth check is complete
-        await SplashScreen.hideAsync();
-      });
+  const { signIn, signUp, signOut } = useAuthOperations();
+  const { user, loading } = useAuthSession();
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  async function signIn(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      throw error;
+  async function updateProfile(name: string) {
+    if (!user) {
+      throw new Error('Юзер не знайдений');
     }
 
-    if (!data.session) {
-      throw new Error('Failed to create session');
-    }
-  }
-
-  async function signUp(email: string, password: string) {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        name: name.trim(),
+      },
     });
-
-    if (error) {
-      throw error;
-    }
-  }
-
-  async function signOut() {
-    const { error } = await supabase.auth.signOut();
 
     if (error) {
       throw error;
@@ -98,6 +50,7 @@ export function AuthProvider(props: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
+    updateProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
