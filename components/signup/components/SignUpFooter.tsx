@@ -2,7 +2,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Link } from 'expo-router';
 
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 
 export function SignUpFooter() {
   return (
@@ -24,12 +25,12 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   footerText: {
-    color: COLORS.text + 'CC',
+    color: COLORS.text.secondary,
     fontSize: 14,
     fontFamily: FONTS.regular,
   },
   link: {
-    color: COLORS.primary,
+    color: COLORS.text.primary,
     fontSize: 14,
     fontFamily: FONTS.semiBold,
   },

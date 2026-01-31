@@ -4,9 +4,11 @@ interface ScreenContainerProps extends ViewProps {
   children: React.ReactNode;
 }
 
-export function ScreenContainer({ children, style, ...props }: ScreenContainerProps) {
+export function ScreenContainer(props: ScreenContainerProps) {
+  const { children, style, ...restProps } = props;
+
   return (
-    <View style={[styles.container, style]} {...props}>
+    <View style={[styles.container, style]} {...restProps}>
       {children}
     </View>
   );

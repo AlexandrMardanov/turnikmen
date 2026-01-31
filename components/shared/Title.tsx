@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 
 type TitleProps = {
   title: string;
@@ -25,14 +26,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontFamily: FONTS.bold,
-    color: COLORS.text,
+    color: COLORS.text.primary,
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     fontFamily: FONTS.regular,
-    color: COLORS.text + 'CC',
+    color: COLORS.text.secondary,
     textAlign: 'center',
   },
 });

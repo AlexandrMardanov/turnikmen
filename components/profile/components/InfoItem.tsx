@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 
 type InfoItemProps = {
   label: string;
@@ -25,12 +26,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontFamily: FONTS.semiBold,
-    color: COLORS.text,
+    color: COLORS.text.primary,
     marginBottom: 4,
   },
   value: {
     fontSize: 16,
     fontFamily: FONTS.medium,
-    color: COLORS.text,
+    color: COLORS.text.primary,
   },
 });

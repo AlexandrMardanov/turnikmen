@@ -9,7 +9,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 
 type InputProps = TextInputProps & {
   value: string;
@@ -36,7 +37,7 @@ export function Input(props: InputProps) {
         setIsFocused(false);
         onBlur?.(e);
       }}
-      placeholderTextColor={COLORS.text + '80'}
+      placeholderTextColor={COLORS.text.tertiary}
       autoCorrect={false}
       {...restProps}
     />
@@ -45,17 +46,17 @@ export function Input(props: InputProps) {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.background.primary,
     borderRadius: 8,
     padding: 16,
     fontSize: 14,
     fontFamily: FONTS.regular,
     marginBottom: 16,
-    color: COLORS.text,
+    color: COLORS.text.primary,
     borderWidth: 1,
-    borderColor: COLORS.text + '20',
+    borderColor: COLORS.border.default,
   },
   inputFocused: {
-    borderColor: COLORS.primary,
+    borderColor: COLORS.border.focus,
   },
 });

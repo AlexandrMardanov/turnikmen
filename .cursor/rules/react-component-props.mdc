@@ -1,0 +1,52 @@
+---
+description: React component props pattern - type first, then destructure
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# React Component Props Pattern
+
+When creating React components, always follow this pattern:
+
+1. Define props type interface
+2. Pass typed props object to component
+3. Destructure props inside component body
+
+## Pattern
+
+```typescript
+// ✅ GOOD - Type props, then destructure inside
+type ComponentNameProps = {
+  prop1: string;
+  prop2: number;
+  onAction: () => void;
+};
+
+export function ComponentName(props: ComponentNameProps) {
+  const { prop1, prop2, onAction } = props;
+  
+  return (
+    <View>
+      <Text>{prop1}</Text>
+    </View>
+  );
+}
+```
+
+```typescript
+// ❌ BAD - Destructuring in function signature
+export function ComponentName({ prop1, prop2, onAction }: ComponentNameProps) {
+  return (
+    <View>
+      <Text>{prop1}</Text>
+    </View>
+  );
+}
+```
+
+## Benefits
+
+- Cleaner function signature
+- Easier to see all props at a glance
+- Better for refactoring
+- Consistent code style across the project

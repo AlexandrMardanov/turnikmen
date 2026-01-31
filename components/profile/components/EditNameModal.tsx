@@ -4,7 +4,8 @@ import { BlurView } from 'expo-blur';
 
 import { Button } from '@/components/shared/Button';
 import { Input } from '@/components/shared/Input';
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 
 type EditNameModalProps = {
   visible: boolean;
@@ -15,7 +16,9 @@ type EditNameModalProps = {
   isSaving: boolean;
 };
 
-export function EditNameModal({ visible, name, onChangeName, onSave, onCancel, isSaving }: EditNameModalProps) {
+export function EditNameModal(props: EditNameModalProps) {
+  const { visible, name, onChangeName, onSave, onCancel, isSaving } = props;
+
   return (
     <Modal visible={visible} transparent animationType='fade' onRequestClose={onCancel}>
       <BlurView intensity={20} tint='light' style={styles.modalOverlay}>
@@ -55,15 +58,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: COLORS.background.overlay,
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.background.primary,
     borderRadius: 16,
     padding: 24,
     width: '100%',
     maxWidth: 400,
-    shadowColor: '#000',
+    shadowColor: COLORS.shadow,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontFamily: FONTS.bold,
-    color: COLORS.text,
+    color: COLORS.text.primary,
     marginBottom: 20,
     textAlign: 'center',
   },

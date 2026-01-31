@@ -1,6 +1,7 @@
 import { ActivityIndicator, Pressable, PressableProps, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 
 type ButtonProps = PressableProps & {
   title: string;
@@ -27,7 +28,7 @@ export function Button(props: ButtonProps) {
       {...restProps}
     >
       {loading ? (
-        <ActivityIndicator color='#fff' />
+        <ActivityIndicator color={COLORS.button.text} />
       ) : (
         <Text style={[styles.buttonText, variant === 'danger' && styles.buttonTextDanger]}>{title}</Text>
       )}
@@ -44,10 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 50,
-    backgroundColor: 'rgba(120, 120, 128, 0.2)',
-  },
-  buttonDanger: {
-    color: COLORS.danger,
+    backgroundColor: COLORS.button.primary,
   },
   buttonPressed: {
     opacity: 0.7,
@@ -57,12 +55,11 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   buttonText: {
-    color: COLORS.primary,
-    fontSize: 17,
+    color: COLORS.button.text,
+    fontSize: 16,
     fontFamily: FONTS.medium,
-    letterSpacing: -0.4,
   },
   buttonTextDanger: {
-    color: COLORS.danger,
+    color: COLORS.button.danger,
   },
 });

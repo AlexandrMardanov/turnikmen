@@ -1,6 +1,7 @@
 import { StyleSheet, Text } from 'react-native';
 
-import { COLORS, FONTS } from '@/constants/colors';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/fonts';
 import { useAuth } from '@/contexts/AuthContext';
 
 import { ScreenContainer } from '../shared/ScreenContainer';
@@ -21,6 +22,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontFamily: FONTS.bold,
-    color: COLORS.text,
+    color: COLORS.text.primary,
   },
 });

@@ -12,13 +12,15 @@ type ProfileInfoProps = {
   onEditPress: () => void;
 };
 
-export function ProfileInfo({ name, email, onEditPress }: ProfileInfoProps) {
+export function ProfileInfo(props: ProfileInfoProps) {
+  const { name, email, onEditPress } = props;
+
   return (
     <View>
       <View style={styles.nameRow}>
         <InfoItem label="Ваше ім'я" value={name || 'Не вказано'} />
         <TouchableOpacity style={styles.editIconButton} onPress={onEditPress} activeOpacity={0.7}>
-          <Ionicons name='create-outline' size={24} color={COLORS.primary} />
+          <Ionicons name='create-outline' size={24} color={COLORS.text.primary} />
         </TouchableOpacity>
       </View>
       <InfoItem label='Електронна пошта' value={email || 'Не вказано'} />

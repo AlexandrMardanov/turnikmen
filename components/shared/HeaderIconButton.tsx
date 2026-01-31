@@ -11,7 +11,9 @@ type HeaderIconButtonProps = {
   size?: number;
 };
 
-export function HeaderIconButton({ iconName, onPress, color = COLORS.text, size = 24 }: HeaderIconButtonProps) {
+export function HeaderIconButton(props: HeaderIconButtonProps) {
+  const { iconName, onPress, color = COLORS.text.primary, size = 24 } = props;
+
   return (
     <TouchableOpacity onPress={onPress}>
       <Ionicons name={iconName} size={size} color={color} style={styles.icon} />
