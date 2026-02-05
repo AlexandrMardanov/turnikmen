@@ -20,7 +20,7 @@ export function ProfileInfo(props: ProfileInfoProps) {
       <View style={styles.nameRow}>
         <InfoItem label="Ваше ім'я" value={name || 'Не вказано'} />
         <TouchableOpacity style={styles.editIconButton} onPress={onEditPress} activeOpacity={0.7}>
-          <Ionicons name='create-outline' size={24} color={COLORS.text.primary} />
+          <Ionicons name='create-outline' size={24} color={COLORS.text.secondary} />
         </TouchableOpacity>
       </View>
       <InfoItem label='Електронна пошта' value={email || 'Не вказано'} />

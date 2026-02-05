@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { AppInitialization } from '@/components/shared/AppInitialization';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { TabBarProvider } from '@/contexts/TabBarContext';
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -11,9 +12,11 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <StatusBar style='dark' />
-      <AppInitialization />
-      <Slot />
+      <TabBarProvider>
+        <StatusBar style='dark' />
+        <AppInitialization />
+        <Slot />
+      </TabBarProvider>
     </AuthProvider>
   );
 }

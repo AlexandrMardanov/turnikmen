@@ -39,6 +39,7 @@ export function Input(props: InputProps) {
       }}
       placeholderTextColor={COLORS.text.tertiary}
       autoCorrect={false}
+      autoComplete='off'
       {...restProps}
     />
   );

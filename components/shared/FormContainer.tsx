@@ -1,19 +1,20 @@
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 
 import { DismissKeyboard } from './DismissKeyboard';
 
 type FormContainerProps = {
   children: React.ReactNode;
+  centered?: boolean;
 };
 
 export function FormContainer(props: FormContainerProps) {
-  const { children } = props;
+  const { children, centered = true } = props;
 
   return (
     <DismissKeyboard>
-      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView style={styles.container} behavior='padding'>
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, !centered && styles.scrollContentTop]}
           keyboardShouldPersistTaps='handled'
           showsVerticalScrollIndicator={false}
         >
@@ -32,7 +33,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 24,
+  },
+  scrollContentTop: {
+    justifyContent: 'flex-start',
   },
   formContainer: {
     width: '100%',

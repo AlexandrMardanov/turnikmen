@@ -59,7 +59,7 @@ export const COLORS = {
   // Border colors
   border: {
     default: 'rgba(0, 0, 0, 0.12)',
-    focus: palette.black,
+    focus: palette.orange,
   },
 
   // Shadow color

@@ -1,0 +1,99 @@
+---
+description: Declarative style for event handlers in React components
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# React Event Handlers - Declarative Style
+
+Generate event handlers inside React components using declarative style with function declarations.
+
+## Rules
+
+1. **Define handlers as function declarations** inside the component body
+2. **Place handlers after hooks** and before the return statement
+3. **Use descriptive names** that indicate the action (e.g., `handleSubmit`, `handleChange`, `handleDelete`)
+4. **Keep handlers focused** - one responsibility per handler
+5. **Extract complex logic** to custom hooks if handler becomes too large
+
+## Pattern
+
+```tsx
+// ✅ GOOD - Declarative style with function declarations
+export const MyComponent = () => {
+  const [value, setValue] = useState('');
+  
+  // Handlers defined as function declarations
+  function handleChange(text: string) {
+    setValue(text);
+  }
+  
+  function handleSubmit() {
+    console.log('Submitted:', value);
+  }
+  
+  return (
+    <View>
+      <Input value={value} onChangeText={handleChange} />
+      <Button onPress={handleSubmit} />
+    </View>
+  );
+};
+```
+
+```tsx
+// ❌ BAD - Inline functions
+export const MyComponent = () => {
+  const [value, setValue] = useState('');
+  
+  return (
+    <View>
+      <Input 
+        value={value} 
+        onChangeText={(text) => setValue(text)} 
+      />
+      <Button onPress={() => console.log('Submitted:', value)} />
+    </View>
+  );
+};
+```
+
+```tsx
+// ❌ BAD - Const arrow functions
+export const MyComponent = () => {
+  const [value, setValue] = useState('');
+  
+  const handleChange = (text: string) => {
+    setValue(text);
+  };
+  
+  return <Input value={value} onChangeText={handleChange} />;
+};
+```
+
+## Complex Handlers
+
+For handlers with complex logic, extract to custom hooks:
+
+```tsx
+// ✅ GOOD - Complex logic in custom hook
+export const FormComponent = () => {
+  const { handleSubmit, handleChange, values, errors } = useFormLogic();
+  
+  return (
+    <View>
+      <Input value={values.name} onChangeText={handleChange('name')} />
+      <Button onPress={handleSubmit} />
+    </View>
+  );
+};
+```
+
+## Naming Conventions
+
+- `handleClick` - for click/press events
+- `handleChange` - for input changes
+- `handleSubmit` - for form submissions
+- `handleDelete` - for delete actions
+- `handleToggle` - for toggle actions
+- `handleSelect` - for selection events
