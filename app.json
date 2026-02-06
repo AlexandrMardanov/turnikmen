@@ -15,29 +15,47 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mardanov.turnikman"
+      "bundleIdentifier": "com.mardanov.turnikman",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
+      }
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#06B6D4",
+          "sounds": []
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
     "android": {
-      "package": "com.mardanov.turnikman"
+      "package": "com.mardanov.turnikman",
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ]
     },
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "4e6c49dc-eef9-4c43-b2a1-127dbfa94dc5"
+        "projectId": "3fe50e27-c67e-4c6d-976d-086c5668a54f"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/4e6c49dc-eef9-4c43-b2a1-127dbfa94dc5"
-    }
+      "url": "https://u.expo.dev/3fe50e27-c67e-4c6d-976d-086c5668a54f"
+    },
+    "owner": "alexmardanov"
   }
 }
