@@ -14,12 +14,11 @@ type WeightEntryWithChange = WeightEntry & { change: number };
 type RecentEntriesSectionProps = {
   entries: WeightEntryWithChange[];
   totalCount: number;
-  onDelete: (id: string) => void;
   onShowAll: () => void;
 };
 
 export function RecentEntriesSection(props: RecentEntriesSectionProps) {
-  const { entries, totalCount, onDelete, onShowAll } = props;
+  const { entries, totalCount, onShowAll } = props;
 
   return (
     <View>
@@ -34,7 +33,7 @@ export function RecentEntriesSection(props: RecentEntriesSectionProps) {
       ) : (
         <SafeAreaView edges={{ bottom: true }} style={{ flex: 1 }}>
           {entries.map((entry) => (
-            <WeightEntryItem key={entry.id} entry={entry} change={entry.change} onDelete={onDelete} />
+            <WeightEntryItem key={entry.id} entry={entry} change={entry.change} />
           ))}
         </SafeAreaView>
       )}

@@ -2,14 +2,16 @@ import { Alert } from 'react-native';
 
 import { useRouter } from 'expo-router';
 
+import { useWeightData } from './useWeightData';
+
 type UseWeightEntryActionsParams = {
   entryId: string;
-  onDelete: (id: string) => void;
 };
 
 export function useWeightEntryActions(params: UseWeightEntryActionsParams) {
-  const { entryId, onDelete } = params;
+  const { entryId } = params;
   const router = useRouter();
+  const { deleteEntry } = useWeightData();
 
   function handleDelete() {
     Alert.alert('Видалити запис', 'Ви впевнені, що хочете видалити цей запис?', [
@@ -17,7 +19,11 @@ export function useWeightEntryActions(params: UseWeightEntryActionsParams) {
       {
         text: 'Видалити',
         style: 'destructive',
-        onPress: () => onDelete(entryId),
+        onPress: () => {
+          deleteEntry(entryId).catch((err) => {
+            Alert.alert('Помилка', (err as Error).message);
+          });
+        },
       },
     ]);
   }

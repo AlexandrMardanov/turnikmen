@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useWeightReminderContext } from '@/contexts/WeightReminderContext';
@@ -37,8 +38,7 @@ export function useWeightData() {
       const data = await getWeightEntries(user.id);
       setEntries(data);
     } catch (err) {
-      console.error('Помилка завантаження даних:', err);
-      setError('Помилка завантаження даних');
+      Alert.alert('Помилка', (err as Error).message);
     } finally {
       setLoading(false);
     }

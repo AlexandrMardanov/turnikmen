@@ -15,7 +15,7 @@ import { RECENT_ENTRIES_LIMIT } from './constants/recentEntriesLimit';
 
 export function WeightDashboardScreen() {
   const router = useRouter();
-  const { entries, entriesWithChanges, loading, error, filterByPeriod, deleteEntry, refresh } = useWeightData();
+  const { entries, entriesWithChanges, loading, error, filterByPeriod, refresh } = useWeightData();
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilterType>('month');
 
   useFocusEffect(() => {
@@ -24,12 +24,6 @@ export function WeightDashboardScreen() {
 
   const filteredEntries = filterByPeriod(selectedPeriod);
   const recentEntries = entriesWithChanges.slice(0, RECENT_ENTRIES_LIMIT);
-
-  function handleDelete(id: string) {
-    deleteEntry(id).catch((err) => {
-      console.error('Невдалося видалити запис:', err);
-    });
-  }
 
   function handleShowHistory() {
     router.push('/(tabs)/(weight)/history');
@@ -55,12 +49,7 @@ export function WeightDashboardScreen() {
       <View style={styles.chartContainer}>
         <WeightChart entries={filteredEntries} />
       </View>
-      <RecentEntriesSection
-        entries={recentEntries}
-        totalCount={entries.length}
-        onDelete={handleDelete}
-        onShowAll={handleShowHistory}
-      />
+      <RecentEntriesSection entries={recentEntries} totalCount={entries.length} onShowAll={handleShowHistory} />
     </ScrollView>
   );
 }

@@ -1,4 +1,4 @@
-import { Alert, FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 
 import { useFocusEffect } from 'expo-router';
 
@@ -12,18 +12,11 @@ import { WeightEntryItem } from '../shared/components/WeightEntryItem';
 import { useWeightData } from '../shared/hooks/useWeightData';
 
 export function WeightHistoryScreen() {
-  const { entriesWithChanges, loading, error, deleteEntry, refresh } = useWeightData();
+  const { entriesWithChanges, loading, error, refresh } = useWeightData();
 
   useFocusEffect(() => {
     refresh();
   });
-
-  function handleDelete(id: string) {
-    deleteEntry(id).catch((err) => {
-      console.error('Невдалося видалити запис:', err);
-      Alert.alert('Помилка', 'Не вдалося видалити запис');
-    });
-  }
 
   if (loading && entriesWithChanges.length === 0) {
     return <LoadingState />;
@@ -42,7 +35,7 @@ export function WeightHistoryScreen() {
       <FlatList
         data={entriesWithChanges}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <WeightEntryItem entry={item} change={item.change} onDelete={handleDelete} />}
+        renderItem={({ item }) => <WeightEntryItem entry={item} change={item.change} />}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} tintColor={COLORS.accent.primary} />}
       />
     </ScreenContainer>
