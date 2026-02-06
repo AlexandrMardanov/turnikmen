@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "ТурнікМен",
-    "slug": "turnikmen",
+    "slug": "turnikman",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "turnikmen",
+    "scheme": "turnikman",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mardanov.turnikmen"
+      "bundleIdentifier": "com.mardanov.turnikman"
     },
     "plugins": [
       "expo-router"
@@ -25,7 +25,7 @@
       "reactCompiler": true
     },
     "android": {
-      "package": "com.mardanov.turnikmen"
+      "package": "com.mardanov.turnikman"
     },
     "extra": {
       "router": {},
