@@ -1,14 +1,14 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+import { Button } from '@/components/shared/Button';
+import { FormContainer } from '@/components/shared/FormContainer';
+import { Input } from '@/components/shared/Input';
 import { COLORS } from '@/constants/colors';
 import { FONTS } from '@/constants/fonts';
 
-import { Button } from '../shared/Button';
-import { FormContainer } from '../shared/FormContainer';
-import { Input } from '../shared/Input';
-import { ScreenContainer } from '../shared/ScreenContainer';
+import { LoadingState } from '../shared/components/LoadingState';
 import { useWeightForm } from './hooks/useWeightForm';
 
 type AddEditWeightFormProps = {
@@ -17,15 +17,12 @@ type AddEditWeightFormProps = {
 
 export function AddEditWeightForm(props: AddEditWeightFormProps) {
   const { id } = props;
-  const { weight, setWeight, date, setDate, loading, error, initialLoading, handleSubmit, handleCancel } =
-    useWeightForm({ id });
+  const { weight, setWeight, date, setDate, loading, initialLoading, handleSubmit, handleCancel } = useWeightForm({
+    id,
+  });
 
   if (initialLoading) {
-    return (
-      <ScreenContainer>
-        <ActivityIndicator size='large' color={COLORS.accent.primary} />
-      </ScreenContainer>
-    );
+    return <LoadingState />;
   }
 
   return (
@@ -38,7 +35,6 @@ export function AddEditWeightForm(props: AddEditWeightFormProps) {
         keyboardType='decimal-pad'
         autoFocus={!id}
       />
-      {error && <Text style={styles.errorText}>{error}</Text>}
       <Text style={styles.label}>Дата</Text>
       <View style={styles.datePickerContainer}>
         <DateTimePicker
@@ -82,16 +78,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     overflow: 'hidden',
   },
-  errorText: {
-    fontSize: 14,
-    fontFamily: FONTS.regular,
-    color: COLORS.text.danger,
-    marginBottom: 16,
-  },
   buttonRow: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 8,
   },
   saveButton: {
     flex: 1,

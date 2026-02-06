@@ -6,7 +6,8 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { getWeightEntry } from '@/lib/weight-mocks';
 
-import { useWeightData } from './useWeightData';
+import { useWeightData } from '../../shared/hooks/useWeightData';
+import { validateWeightInput } from '../utils/validateWeightInput';
 
 type UseWeightFormProps = {
   id?: string;
@@ -21,7 +22,6 @@ export function useWeightForm(props: UseWeightFormProps) {
   const [weight, setWeight] = useState('');
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(!!id);
 
   // Load existing entry if editing
@@ -41,7 +41,6 @@ export function useWeightForm(props: UseWeightFormProps) {
         }
       } catch (err) {
         console.error('Помилка завантаження запису:', err);
-        setError('Помилка завантаження запису');
       } finally {
         setInitialLoading(false);
       }
@@ -50,65 +49,53 @@ export function useWeightForm(props: UseWeightFormProps) {
     loadEntry();
   }, [id]);
 
-  const validateForm = (): boolean => {
-    setError(null);
+  function validateForm(): boolean {
+    const validation = validateWeightInput(weight);
 
-    if (!weight.trim()) {
+    if (!validation.isValid) {
       Alert.alert('Помилка', 'Введіть вагу');
       return false;
     }
 
-    const weightNum = parseFloat(weight);
-
-    if (isNaN(weightNum) || weightNum <= 0) {
-      setError('Вага повинна бути більше 0');
-      return false;
-    }
-
-    if (weightNum > 200) {
-      setError('Вага занадто велика');
-      return false;
-    }
-
     return true;
-  };
+  }
 
-  async function handleSubmit() {
+  function handleSubmit() {
     if (!validateForm()) {
       return;
     }
     if (!user?.id) {
-      setError('Користувач не авторизований');
+      Alert.alert('Помилка', 'Користувач не авторизований');
       return;
     }
 
-    try {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
 
-      const weightNum = parseFloat(weight);
-      const dateStr = date.toISOString().split('T')[0];
+    const weightNum = parseFloat(weight);
+    const dateStr = date.toISOString().split('T')[0];
 
-      if (id) {
-        await updateEntry(id, {
+    const savePromise = id
+      ? updateEntry(id, {
           weight: weightNum,
           date: dateStr,
-        });
-      } else {
-        await addEntry({
+        })
+      : addEntry({
           user_id: user.id,
           weight: weightNum,
           date: dateStr,
         });
-      }
 
-      router.back();
-    } catch (err) {
-      console.error('Error saving weight entry:', err);
-      setError('Помилка збереження');
-    } finally {
-      setLoading(false);
-    }
+    savePromise
+      .then(() => {
+        router.back();
+      })
+      .catch((err) => {
+        console.error('Невдалося зберегти запис:', err);
+        Alert.alert('Помилка', 'Помилка збереження');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   function handleCancel() {
@@ -121,7 +108,6 @@ export function useWeightForm(props: UseWeightFormProps) {
     date,
     setDate,
     loading,
-    error,
     initialLoading,
     handleSubmit,
     handleCancel,

@@ -1,0 +1,44 @@
+import { Alert, FlatList, RefreshControl } from 'react-native';
+
+import { ScreenContainer } from '@/components/shared/ScreenContainer';
+import { COLORS } from '@/constants/colors';
+
+import { EmptyState } from '../shared/components/EmptyState';
+import { ErrorState } from '../shared/components/ErrorState';
+import { LoadingState } from '../shared/components/LoadingState';
+import { WeightEntryItem } from '../shared/components/WeightEntryItem';
+import { useWeightData } from '../shared/hooks/useWeightData';
+
+export function WeightHistoryScreen() {
+  const { entriesWithChanges, loading, error, deleteEntry, refresh } = useWeightData();
+
+  function handleDelete(id: string) {
+    deleteEntry(id).catch((err) => {
+      console.error('Невдалося видалити запис:', err);
+      Alert.alert('Помилка', 'Не вдалося видалити запис');
+    });
+  }
+
+  if (loading && entriesWithChanges.length === 0) {
+    return <LoadingState />;
+  }
+
+  if (error) {
+    return <ErrorState message={error} />;
+  }
+
+  if (entriesWithChanges.length === 0) {
+    return <EmptyState title='Немає записів' message='Почніть відстежувати свою вагу, щоб бачити прогрес' />;
+  }
+
+  return (
+    <ScreenContainer>
+      <FlatList
+        data={entriesWithChanges}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <WeightEntryItem entry={item} change={item.change} onDelete={handleDelete} />}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} tintColor={COLORS.accent.primary} />}
+      />
+    </ScreenContainer>
+  );
+}

@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '@/constants/colors';
 import { FONTS } from '@/constants/fonts';
 
-import type { PeriodFilter as PeriodFilterType } from '../hooks/useWeightData';
+import type { PeriodFilter as PeriodFilterType } from '../../shared/hooks/useWeightData';
 
 type PeriodFilterProps = {
   selectedPeriod: PeriodFilterType;

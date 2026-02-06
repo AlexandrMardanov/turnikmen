@@ -1,0 +1,74 @@
+import { useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+
+import { useRouter } from 'expo-router';
+
+import { EmptyState } from '../shared/components/EmptyState';
+import { ErrorState } from '../shared/components/ErrorState';
+import { LoadingState } from '../shared/components/LoadingState';
+import { type PeriodFilter as PeriodFilterType, useWeightData } from '../shared/hooks/useWeightData';
+import { PeriodFilter } from './components/PeriodFilter';
+import { RecentEntriesSection } from './components/RecentEntriesSection';
+import { WeightChart } from './components/WeightChart';
+import { RECENT_ENTRIES_LIMIT } from './constants/recentEntriesLimit';
+
+export function WeightDashboardScreen() {
+  const router = useRouter();
+  const { entries, entriesWithChanges, loading, error, filterByPeriod, deleteEntry } = useWeightData();
+  const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilterType>('month');
+
+  const filteredEntries = filterByPeriod(selectedPeriod);
+  const recentEntries = entriesWithChanges.slice(0, RECENT_ENTRIES_LIMIT);
+
+  function handleDelete(id: string) {
+    deleteEntry(id).catch((err) => {
+      console.error('Невдалося видалити запис:', err);
+    });
+  }
+
+  function handleShowHistory() {
+    router.push('/(tabs)/(weight)/history');
+  }
+
+  if (loading) {
+    return <LoadingState />;
+  }
+
+  if (error) {
+    return <ErrorState message={error} />;
+  }
+
+  if (entries.length === 0) {
+    return <EmptyState title='Немає записів' message='Почніть відстежувати свою вагу, щоб бачити прогрес' />;
+  }
+
+  return (
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <View style={styles.periodFilterContainer}>
+        <PeriodFilter selectedPeriod={selectedPeriod} onPeriodChange={setSelectedPeriod} />
+      </View>
+      <View style={styles.chartContainer}>
+        <WeightChart entries={filteredEntries} />
+      </View>
+      <RecentEntriesSection
+        entries={recentEntries}
+        totalCount={entries.length}
+        onDelete={handleDelete}
+        onShowAll={handleShowHistory}
+      />
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    padding: 24,
+  },
+  periodFilterContainer: {
+    marginBottom: 16,
+  },
+  chartContainer: {
+    marginBottom: 16,
+  },
+});

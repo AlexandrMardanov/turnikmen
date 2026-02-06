@@ -2,11 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { useWeightEntryActions } from '@/components/weight/hooks/useWeightEntryActions';
-import { formatFullDate } from '@/components/weight/utils/dateFormatters';
 import { COLORS } from '@/constants/colors';
 import { FONTS } from '@/constants/fonts';
 import type { WeightEntry } from '@/lib/weight-mocks';
+
+import { useWeightEntryActions } from '../hooks/useWeightEntryActions';
+import { formatFullDate } from '../utils/formatFullDate';
 
 type WeightEntryItemProps = {
   entry: WeightEntry;
@@ -29,7 +30,7 @@ export function WeightEntryItem(props: WeightEntryItemProps) {
           <Text style={styles.weight}>{entry.weight} кг</Text>
           {change !== 0 && (
             <Text style={[styles.change, change < 0 ? styles.changePositive : styles.changeNegative]}>
-              {change > 0 ? '+' : ''} {change.toFixed(2)} кг
+              {change > 0 ? '+' : ''} {change.toFixed(1)} кг
             </Text>
           )}
         </View>

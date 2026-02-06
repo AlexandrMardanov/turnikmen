@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 
-import { AddEditWeightForm } from '@/components/weight/AddEditWeightForm';
+import { AddEditWeightForm } from '@/components/weight/add-edit/AddEditWeightForm';
 import { useScreenOptions } from '@/hooks/useScreenOptions';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 

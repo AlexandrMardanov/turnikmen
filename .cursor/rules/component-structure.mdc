@@ -1,0 +1,308 @@
+---
+description: Component structure and organization guidelines
+alwaysApply: true
+---
+
+# Component Structure Guidelines
+
+Follow this structure when creating new features and components in the app.
+
+## App Directory Structure
+
+Keep `app/` directory minimal - only screen configuration and component import:
+
+```tsx
+// ✅ GOOD - app/(tabs)/(weight)/index.tsx
+import { WeightDashboardScreen } from '@/components/weight/WeightDashboardScreen';
+import { AddWeightButton } from '@/components/weight/components/AddWeightButton';
+import { useScreenOptions } from '@/hooks/useScreenOptions';
+
+export default function Weight() {
+  useScreenOptions({
+    title: 'Вага',
+    headerRight: () => <AddWeightButton />,
+  });
+
+  return <WeightDashboardScreen />;
+}
+```
+
+```tsx
+// ❌ BAD - Logic and state in app directory
+export default function Weight() {
+  const [data, setData] = useState([]);
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    // Complex logic here
+  }, []);
+
+  return (
+    <View>
+      {/* Complex JSX here */}
+    </View>
+  );
+}
+```
+
+## Components Directory Structure
+
+Organize components by feature group with page-level folders:
+
+```
+components/
+  feature-group/             # Feature group (e.g., weight, profile, auth)
+    page-name/               # Page/screen folder (e.g., dashboard, history)
+      PageScreen.tsx         # Main screen component
+      components/            # Page-specific components
+        SubComponent.tsx
+        AnotherComponent.tsx
+      hooks/                 # Page-specific hooks
+        usePageData.ts
+        usePageActions.ts
+      utils/                 # Page-specific utilities
+        helpers.ts
+        formatters.ts
+      constants/             # Page-specific constants (optional)
+        config.ts
+    another-page/            # Another page folder
+      AnotherPageScreen.tsx
+      components/
+        Component.tsx
+      hooks/
+        useAnotherPage.ts
+    shared/                  # Shared within feature group
+      SharedComponent.tsx
+      hooks/
+        useSharedLogic.ts
+  shared/                    # Shared across all features
+    Button.tsx
+    Input.tsx
+```
+
+### Real Example
+
+```
+components/
+  weight/
+    dashboard/
+      WeightDashboardScreen.tsx
+      components/
+        PeriodFilter.tsx
+        WeightChart.tsx
+        WeightEntryItem.tsx
+      hooks/
+        useWeightData.ts
+    history/
+      WeightHistoryScreen.tsx
+      components/
+        HistoryList.tsx
+      hooks/
+        useWeightHistory.ts
+    add-edit/
+      AddEditWeightForm.tsx
+      components/
+        WeightInput.tsx
+      hooks/
+        useWeightForm.ts
+    shared/
+      components/
+        AddWeightButton.tsx
+      hooks/
+        useWeightEntryActions.ts
+      utils/
+        dateFormatters.ts
+  profile/
+    profile/
+      ProfileScreen.tsx
+      components/
+        EditNameModal.tsx
+        InfoItem.tsx
+        ProfileInfo.tsx
+      hooks/
+        useProfileEdit.ts
+    shared/
+      components/
+        LogoutButton.tsx
+      hooks/
+        useLogout.ts
+  shared/
+    Button.tsx
+    Input.tsx
+    ScreenContainer.tsx
+```
+
+## Component Principles
+
+### 1. Keep Components Simple
+
+Extract logic to hooks and utilities:
+
+```tsx
+// ✅ GOOD - Simple component with extracted logic
+export function WeightDashboardScreen() {
+  const router = useRouter();
+  const { entries, loading, error, deleteEntry } = useWeightData();
+  const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilterType>('month');
+
+  function handleDelete(id: string) {
+    deleteEntry(id);
+  }
+
+  function handleShowHistory() {
+    router.push('/(tabs)/(weight)/history');
+  }
+
+  if (loading) return <ActivityIndicator />;
+  if (error) return <ErrorMessage text={error} />;
+
+  return (
+    <ScrollView>
+      <PeriodFilter selectedPeriod={selectedPeriod} onPeriodChange={setSelectedPeriod} />
+      <WeightChart entries={entries} />
+    </ScrollView>
+  );
+}
+```
+
+```tsx
+// ❌ BAD - Complex component with inline logic
+export function WeightDashboardScreen() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const { data } = await supabase.from('weight_entries').select('*');
+        setEntries(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // More complex logic...
+}
+```
+
+### 2. Extract Logic to Hooks
+
+Move data fetching, state management, and business logic to custom hooks:
+
+```tsx
+// ✅ GOOD - components/weight/dashboard/hooks/useWeightData.ts
+export function useWeightData() {
+  const [entries, setEntries] = useState<WeightEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  async function fetchEntries() {
+    // Implementation
+  }
+
+  async function deleteEntry(id: string) {
+    // Implementation
+  }
+
+  return { entries, loading, error, fetchEntries, deleteEntry };
+}
+```
+
+### 3. Extract Utilities
+
+Move pure functions and formatters to utils. **One function per file** with filename matching the function name:
+
+```tsx
+// ✅ GOOD - components/weight/shared/utils/formatDate.ts
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString('uk-UA');
+}
+```
+
+```tsx
+// ✅ GOOD - components/weight/shared/utils/formatTime.ts
+export function formatTime(date: Date): string {
+  return date.toLocaleTimeString('uk-UA');
+}
+```
+
+```tsx
+// ❌ BAD - Multiple functions in one file
+// components/weight/shared/utils/dateFormatters.ts
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString('uk-UA');
+}
+
+export function formatTime(date: Date): string {
+  return date.toLocaleTimeString('uk-UA');
+}
+```
+
+```tsx
+// ❌ BAD - Filename doesn't match function name
+// components/weight/shared/utils/helpers.ts
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString('uk-UA');
+}
+```
+
+## Naming Conventions
+
+- **Folder names**: kebab-case (e.g., `dashboard`, `add-edit`, `history`)
+- **Screen components**: `PageNameScreen.tsx` (e.g., `WeightDashboardScreen.tsx`, `ProfileScreen.tsx`)
+- **Form components**: `PageNameForm.tsx` (e.g., `AddEditWeightForm.tsx`)
+- **Sub-components**: Descriptive names (e.g., `PeriodFilter.tsx`, `WeightChart.tsx`)
+- **Hooks**: `usePageName.ts` or `useFeatureName.ts` (e.g., `useWeightData.ts`, `useWeightForm.ts`)
+- **Utils**: **One function per file**, filename matches function name (e.g., `formatDate.ts` exports `formatDate`, `validateEmail.ts` exports `validateEmail`)
+
+## Shared Components
+
+- **Page-level**: Place in page folder if used only in that page
+- **Feature-level shared**: Place in `components/feature-group/shared/` if used across multiple pages in the feature
+- **App-level shared**: Place in `components/shared/` if used across multiple features
+
+## Import Paths
+
+Use path alias `@` when importing from directories 2-3+ levels up:
+
+```tsx
+// ✅ GOOD - Using @ alias for paths going up multiple levels
+import { ScreenContainer } from '@/components/shared/ScreenContainer';
+import { COLORS } from '@/constants/colors';
+import { useAuth } from '@/contexts/AuthContext';
+
+// ❌ BAD - Relative paths going up 2-3+ levels
+import { ScreenContainer } from '../../../shared/ScreenContainer';
+import { COLORS } from '../../../../constants/colors';
+```
+
+**Rules:**
+- Use `@` alias for imports from root-level directories (`@/components`, `@/constants`, `@/contexts`, `@/lib`, etc.)
+- Use relative paths only within the same feature/module (e.g., `./components/`, `../hooks/`)
+- Prefer `@` over `../../../` for better readability and maintainability
+
+## Linter Errors
+
+**CRITICAL**: Always fix linter errors immediately after creating or editing files.
+
+- Run linter check after substantive edits
+- Fix all introduced linter errors before proceeding
+- Common issues: import order, unused variables, missing types
+- Use `ReadLints` tool to verify no errors remain
+
+## Summary
+
+1. **App directory**: Minimal code, only screen setup and component import
+2. **Components directory**: Organized by feature group → page folders → components/hooks/utils
+3. **Page folders**: Each page has its own folder with all related files
+4. **Simple components**: Extract logic to hooks and utilities
+5. **Custom hooks**: For data fetching, state management, business logic
+6. **Utils**: For pure functions, formatters, validators
+7. **Shared structure**: Page-level → Feature-level (`shared/`) → App-level (`components/shared/`)
+8. **Import paths**: Use `@` alias for paths going up 2-3+ levels
+9. **Linter**: Fix all linter errors immediately after editing files

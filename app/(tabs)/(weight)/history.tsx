@@ -1,5 +1,5 @@
-import { WeightHistoryScreen } from '@/components/weight/WeightHistoryScreen';
-import { AddWeightButton } from '@/components/weight/components/AddWeightButton';
+import { WeightHistoryScreen } from '@/components/weight/history/WeightHistoryScreen';
+import { AddWeightButton } from '@/components/weight/shared/components/AddWeightButton';
 import { useScreenOptions } from '@/hooks/useScreenOptions';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 
